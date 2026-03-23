@@ -1,0 +1,418 @@
+---
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import skillsData from '../data/skills.json';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="skills" class="relative py-24 md:py-32">
+  <div class="section-container relative z-10">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">
+      <span class="gradient-text">{t.skills.title}</span>
+    </h2>
+    <p class="text-neural-muted text-center mb-4 max-w-xl mx-auto text-sm">
+      {t.skills.subtitle}
+    </p>
+    <p class="text-neural-muted/50 text-center mb-12 md:hidden text-xs">
+      {t.skills.hint_mobile}
+    </p>
+
+    <div id="skill-graph-container" class="w-full max-w-5xl mx-auto relative" style="min-height: 500px;">
+      <svg id="skill-graph" class="w-full" style="min-height: 500px;"></svg>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neural-nature/20 to-transparent"></div>
+</section>
+
+<script define:vars={{ skillsData, lang }}>
+  // Store data for use in the client-side script
+  window.__skillsData = skillsData;
+  window.__skillsLang = lang;
+</script>
+
+<script>
+  async function initGraph() {
+    const d3 = await import('d3');
+    const data = (window as any).__skillsData;
+    const lang = (window as any).__skillsLang || 'es';
+
+    function getLabel(label: any): string {
+      if (typeof label === 'string') return label;
+      return label[lang] || label['es'] || '';
+    }
+
+    const container = document.getElementById('skill-graph-container')!;
+    const svg = d3.select('#skill-graph');
+    svg.selectAll('*').remove();
+
+    const rect = container.getBoundingClientRect();
+    const width = rect.width;
+    const height = Math.max(500, Math.min(700, window.innerHeight * 0.6));
+
+    svg.attr('viewBox', `0 0 ${width} ${height}`).attr('width', width).attr('height', height);
+
+    // Build nodes and links
+    interface GraphNode extends d3.SimulationNodeDatum {
+      id: string;
+      label: string;
+      color: string;
+      radius: number;
+      isCategory: boolean;
+      parentId?: string;
+      expanded?: boolean;
+      visible: boolean;
+      fx?: number | null;
+      fy?: number | null;
+    }
+
+    interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
+      source: string | GraphNode;
+      target: string | GraphNode;
+      isParentChild: boolean;
+    }
+
+    const nodes: GraphNode[] = [];
+    const links: GraphLink[] = [];
+    const expandedCategories = new Set<string>();
+
+    // Category nodes
+    data.categories.forEach((cat: any) => {
+      nodes.push({
+        id: cat.id,
+        label: getLabel(cat.label),
+        color: cat.color,
+        radius: 35,
+        isCategory: true,
+        expanded: false,
+        visible: true,
+      });
+
+      // Child nodes (hidden initially)
+      cat.children.forEach((child: any) => {
+        nodes.push({
+          id: child.id,
+          label: getLabel(child.label),
+          color: cat.color,
+          radius: 18,
+          isCategory: false,
+          parentId: cat.id,
+          visible: false,
+        });
+
+        // Parent-child link
+        links.push({
+          source: cat.id,
+          target: child.id,
+          isParentChild: true,
+        });
+      });
+    });
+
+    // Category-to-category connections
+    data.connections.forEach((conn: [string, string]) => {
+      links.push({
+        source: conn[0],
+        target: conn[1],
+        isParentChild: false,
+      });
+    });
+
+    // SVG groups
+    const defs = svg.append('defs');
+
+    // Glow filter
+    const filter = defs.append('filter').attr('id', 'glow');
+    filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    const linkGroup = svg.append('g').attr('class', 'links');
+    const nodeGroup = svg.append('g').attr('class', 'nodes');
+
+    // Force simulation
+    const simulation = d3
+      .forceSimulation<GraphNode>()
+      .force(
+        'link',
+        d3
+          .forceLink<GraphNode, GraphLink>()
+          .id((d) => d.id)
+          .distance((d) => (d.isParentChild ? 70 : 150))
+          .strength((d) => (d.isParentChild ? 0.8 : 0.2))
+      )
+      .force('charge', d3.forceManyBody().strength(-300))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide<GraphNode>().radius((d) => d.radius + 10))
+      .force('x', d3.forceX(width / 2).strength(0.05))
+      .force('y', d3.forceY(height / 2).strength(0.05));
+
+    function getVisibleNodes() {
+      return nodes.filter((n) => n.visible);
+    }
+
+    function getVisibleLinks() {
+      const visibleIds = new Set(getVisibleNodes().map((n) => n.id));
+      return links.filter((l) => {
+        const sourceId = typeof l.source === 'string' ? l.source : l.source.id;
+        const targetId = typeof l.target === 'string' ? l.target : l.target.id;
+        return visibleIds.has(sourceId) && visibleIds.has(targetId);
+      });
+    }
+
+    function update() {
+      const visibleNodes = getVisibleNodes();
+      const visibleLinks = getVisibleLinks();
+
+      // Links
+      const linkSel = linkGroup
+        .selectAll<SVGLineElement, GraphLink>('line')
+        .data(visibleLinks, (d: any) => {
+          const sId = typeof d.source === 'string' ? d.source : d.source.id;
+          const tId = typeof d.target === 'string' ? d.target : d.target.id;
+          return `${sId}-${tId}`;
+        });
+
+      linkSel.exit().transition().duration(300).attr('opacity', 0).remove();
+
+      const linkEnter = linkSel
+        .enter()
+        .append('line')
+        .attr('stroke', (d: GraphLink) => {
+          if (d.isParentChild) {
+            const parentNode = nodes.find(
+              (n) => n.id === (typeof d.source === 'string' ? d.source : (d.source as GraphNode).id)
+            );
+            return parentNode ? parentNode.color : '#22c55e';
+          }
+          return '#22c55e';
+        })
+        .attr('stroke-opacity', 0)
+        .attr('stroke-width', (d: GraphLink) => (d.isParentChild ? 1 : 1.5))
+        .attr('stroke-dasharray', (d: GraphLink) => (d.isParentChild ? '4,4' : 'none'));
+
+      linkEnter.transition().duration(500).attr('stroke-opacity', (d: GraphLink) => (d.isParentChild ? 0.3 : 0.15));
+
+      // Nodes
+      const nodeSel = nodeGroup
+        .selectAll<SVGGElement, GraphNode>('g.node')
+        .data(visibleNodes, (d: GraphNode) => d.id);
+
+      nodeSel.exit().transition().duration(300).attr('opacity', 0).attr('transform', 'scale(0)').remove();
+
+      const nodeEnter = nodeSel.enter().append('g').attr('class', 'node').attr('opacity', 0).style('cursor', 'pointer');
+
+      // Circle
+      nodeEnter
+        .append('circle')
+        .attr('r', (d) => d.radius)
+        .attr('fill', (d) => {
+          const hex = d.color;
+          return `${hex}15`;
+        })
+        .attr('stroke', (d) => d.color)
+        .attr('stroke-width', (d) => (d.isCategory ? 2 : 1))
+        .attr('stroke-opacity', (d) => (d.isCategory ? 0.6 : 0.4))
+        .attr('filter', (d) => (d.isCategory ? 'url(#glow)' : 'none'));
+
+      // Label
+      nodeEnter
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', (d) => (d.isCategory ? '0.35em' : '0.35em'))
+        .attr('fill', (d) => (d.isCategory ? d.color : '#e2e8f0'))
+        .attr('font-size', (d) => (d.isCategory ? '11px' : '9px'))
+        .attr('font-weight', (d) => (d.isCategory ? '600' : '400'))
+        .attr('font-family', 'Inter, system-ui, sans-serif')
+        .attr('pointer-events', 'none')
+        .each(function (d) {
+          const text = d3.select(this);
+          const words = d.label.split(/\s+/);
+          if (words.length > 1 && d.isCategory) {
+            text.text('');
+            words.forEach((word: string, i: number) => {
+              text
+                .append('tspan')
+                .attr('x', 0)
+                .attr('dy', i === 0 ? `-${(words.length - 1) * 0.3}em` : '1.1em')
+                .text(word);
+            });
+          } else {
+            text.text(d.label);
+          }
+        });
+
+      // Expand indicator for categories
+      nodeEnter
+        .filter((d) => d.isCategory)
+        .append('text')
+        .attr('class', 'expand-indicator')
+        .attr('text-anchor', 'middle')
+        .attr('dy', (d) => {
+          const words = d.label.split(/\s+/);
+          return words.length > 1 ? `${words.length * 0.5 + 0.8}em` : '1.8em';
+        })
+        .attr('fill', (d) => d.color)
+        .attr('font-size', '8px')
+        .attr('opacity', 0.5)
+        .text((d) => (expandedCategories.has(d.id) ? '−' : '+'));
+
+      nodeEnter.transition().duration(500).attr('opacity', 1);
+
+      // Interactions
+      const allNodes = nodeGroup.selectAll<SVGGElement, GraphNode>('g.node');
+
+      // Hover effects
+      allNodes
+        .on('mouseenter', function (event, d) {
+          // Highlight this node
+          d3.select(this).select('circle').transition().duration(200).attr('stroke-opacity', 1).attr('stroke-width', 3);
+
+          // Dim others
+          allNodes
+            .filter((n: GraphNode) => n.id !== d.id)
+            .transition()
+            .duration(200)
+            .attr('opacity', (n: GraphNode) => {
+              const isConnected = visibleLinks.some((l) => {
+                const sId = typeof l.source === 'string' ? l.source : l.source.id;
+                const tId = typeof l.target === 'string' ? l.target : l.target.id;
+                return (sId === d.id && tId === n.id) || (tId === d.id && sId === n.id);
+              });
+              return isConnected ? 0.9 : 0.2;
+            });
+
+          // Highlight connected links
+          linkGroup
+            .selectAll('line')
+            .transition()
+            .duration(200)
+            .attr('stroke-opacity', (l: any) => {
+              const sId = typeof l.source === 'string' ? l.source : l.source.id;
+              const tId = typeof l.target === 'string' ? l.target : l.target.id;
+              return sId === d.id || tId === d.id ? 0.6 : 0.03;
+            });
+        })
+        .on('mouseleave', function () {
+          allNodes.transition().duration(200).attr('opacity', 1);
+          allNodes
+            .selectAll('circle')
+            .transition()
+            .duration(200)
+            .attr('stroke-opacity', (d: any) => (d.isCategory ? 0.6 : 0.4))
+            .attr('stroke-width', (d: any) => (d.isCategory ? 2 : 1));
+          linkGroup
+            .selectAll('line')
+            .transition()
+            .duration(200)
+            .attr('stroke-opacity', (d: any) => (d.isParentChild ? 0.3 : 0.15));
+        });
+
+      // Click to expand/collapse
+      allNodes
+        .filter((d: GraphNode) => d.isCategory)
+        .on('click', function (event, d) {
+          event.stopPropagation();
+
+          if (expandedCategories.has(d.id)) {
+            expandedCategories.delete(d.id);
+            nodes.forEach((n) => {
+              if (n.parentId === d.id) n.visible = false;
+            });
+          } else {
+            expandedCategories.add(d.id);
+            nodes.forEach((n) => {
+              if (n.parentId === d.id) {
+                n.visible = true;
+                n.x = (d.x || width / 2) + (Math.random() - 0.5) * 50;
+                n.y = (d.y || height / 2) + (Math.random() - 0.5) * 50;
+              }
+            });
+          }
+
+          update();
+        });
+
+      // Drag
+      const drag = d3
+        .drag<SVGGElement, GraphNode>()
+        .on('start', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        })
+        .on('drag', (event, d) => {
+          d.fx = event.x;
+          d.fy = event.y;
+        })
+        .on('end', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        });
+
+      allNodes.call(drag);
+
+      // Update simulation
+      simulation.nodes(visibleNodes);
+      (simulation.force('link') as d3.ForceLink<GraphNode, GraphLink>).links(visibleLinks);
+      simulation.alpha(0.5).restart();
+    }
+
+    // Tick
+    simulation.on('tick', () => {
+      linkGroup
+        .selectAll<SVGLineElement, GraphLink>('line')
+        .attr('x1', (d: any) => d.source.x)
+        .attr('y1', (d: any) => d.source.y)
+        .attr('x2', (d: any) => d.target.x)
+        .attr('y2', (d: any) => d.target.y);
+
+      nodeGroup
+        .selectAll<SVGGElement, GraphNode>('g.node')
+        .attr('transform', (d) => `translate(${d.x},${d.y})`);
+    });
+
+    update();
+
+    // Resize handler
+    let resizeTimeout: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(() => {
+        const newRect = container.getBoundingClientRect();
+        const newWidth = newRect.width;
+        const newHeight = Math.max(500, Math.min(700, window.innerHeight * 0.6));
+        svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`).attr('width', newWidth).attr('height', newHeight);
+        simulation
+          .force('center', d3.forceCenter(newWidth / 2, newHeight / 2))
+          .force('x', d3.forceX(newWidth / 2).strength(0.05))
+          .force('y', d3.forceY(newHeight / 2).strength(0.05));
+        simulation.alpha(0.3).restart();
+      }, 250);
+    });
+  }
+
+  // Initialize when visible
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          initGraph();
+          observer.disconnect();
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  const graphEl = document.getElementById('skill-graph-container');
+  if (graphEl) observer.observe(graphEl);
+</script>

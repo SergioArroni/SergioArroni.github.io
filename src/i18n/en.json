@@ -1,0 +1,213 @@
+{
+    "nav": {
+        "about": "About",
+        "skills": "Skills",
+        "experience": "Experience",
+        "education": "Education",
+        "awards": "Awards",
+        "publications": "Publications",
+        "contact": "Contact"
+    },
+    "hero": {
+        "greeting": "Hi, I'm",
+        "name": "Sergio Arroni del Riego",
+        "role": "AI Architect & Researcher",
+        "subtitle": "Industrial PhD Student in Intelligent Systems",
+        "location": "Gijón, Asturias, Spain",
+        "cta_cv": "Download CV",
+        "cta_contact": "Get in Touch"
+    },
+    "about": {
+        "title": "About Me",
+        "description": "A profile at the intersection of applied research and practical engineering. I combine my research work with a full-time position, participating in the entire development cycle: from algorithmic design in Python to production deployment.",
+        "focus_areas": {
+            "title": "Focus Areas",
+            "optimization": {
+                "title": "Algorithms & Optimization",
+                "description": "Implementation of solutions based on Bayesian Optimization (BoTorch), evolutionary algorithms, and time series forecasting."
+            },
+            "nlp": {
+                "title": "AI & Language",
+                "description": "Design of RAG architectures with Gemini (GCP) to process complex information."
+            },
+            "mlops": {
+                "title": "Infrastructure & MLOps",
+                "description": "Infrastructure management on AWS using Terraform to ensure scalability and efficiency."
+            },
+            "xai": {
+                "title": "Explainable AI (XAI)",
+                "description": "Application of interpretability techniques to make complex models useful and transparent for business decision-making."
+            }
+        }
+    },
+    "skills": {
+        "title": "Skills",
+        "subtitle": "Click on categories to explore technologies. Drag nodes to reorganize the graph.",
+        "hint_mobile": "Tap categories to expand them."
+    },
+    "experience": {
+        "title": "Experience",
+        "roles": [
+            {
+                "company": "TheNextPangea S.L.",
+                "role": "AI Architect & Researcher",
+                "period": "August 2023 – Present",
+                "description": "Hybrid role in a liquid organization, combining product development with technical coordination of multidisciplinary teams.",
+                "highlights": [
+                    "Technology transfer: bringing cutting-edge research into functional systems with business impact.",
+                    "R&D in Tabular Generative AI: VAEs, Diffusion Models, and Transformers for data synthesis.",
+                    "Single and multi-objective optimization with BoTorch and genetic algorithms.",
+                    "NLP MVP based on RAG with Gemini on Google Cloud.",
+                    "ETL pipelines and predictive models using the Darts library.",
+                    "Autonomous infrastructure management through Terraform (IaC) and CI/CD on AWS.",
+                    "Leadership in technical writing for public project proposals."
+                ],
+                "tags": [
+                    "Python",
+                    "BoTorch",
+                    "RAG",
+                    "Gemini",
+                    "AWS",
+                    "Terraform",
+                    "Darts",
+                    "CI/CD"
+                ]
+            },
+            {
+                "company": "University of Oviedo Foundation (FUO)",
+                "role": "Machine Learning Research Grant",
+                "period": "November 2021 – July 2023",
+                "description": "Applied research in Machine Learning, contributing to research projects and scientific publications.",
+                "highlights": [
+                    "Research in sentiment analysis with Transformer architectures.",
+                    "Development of defense systems against adversarial attacks in IDS.",
+                    "Publication of 2 articles in internationally indexed journals."
+                ],
+                "tags": [
+                    "Machine Learning",
+                    "NLP",
+                    "Transformers",
+                    "Python",
+                    "Research"
+                ]
+            },
+            {
+                "company": "University of Oviedo",
+                "role": "IT Services Intern",
+                "period": "September 2020 – June 2021",
+                "description": "Technical support and university IT infrastructure management.",
+                "highlights": [
+                    "Technical support and IT infrastructure management.",
+                    "Automation of system administration tasks."
+                ],
+                "tags": [
+                    "IT",
+                    "System Administration",
+                    "Technical Support"
+                ]
+            }
+        ]
+    },
+    "education": {
+        "title": "Education",
+        "degrees": [
+            {
+                "degree": "PhD",
+                "field": "Intelligent Systems",
+                "institution": "University of Oviedo",
+                "period": "September 2024 – Present",
+                "focus": "Tabular Generative AI"
+            },
+            {
+                "degree": "Master's Degree",
+                "field": "Artificial Intelligence",
+                "institution": "Polytechnic University of Madrid",
+                "period": "September 2023 – June 2024",
+                "focus": ""
+            },
+            {
+                "degree": "Bachelor's Degree",
+                "field": "Computer Engineering",
+                "institution": "University of Oviedo",
+                "period": "September 2019 – June 2023",
+                "focus": ""
+            }
+        ],
+        "certifications_title": "Certifications",
+        "certifications": [
+            {
+                "name": "Machine Learning",
+                "issuer": "Stanford University"
+            },
+            {
+                "name": "Introduction to Deep Learning & Neural Networks with Keras",
+                "issuer": "IBM"
+            }
+        ]
+    },
+    "awards": {
+        "title": "Awards & Recognition",
+        "items": [
+            {
+                "title": "HP Hackathon Winner",
+                "description": "\"Rural Spain\" — First prize at hackathon organized by HP.",
+                "icon": "trophy"
+            },
+            {
+                "title": "Best Bachelor's Thesis",
+                "description": "University of Oviedo — Best thesis of the graduating class.",
+                "icon": "star"
+            },
+            {
+                "title": "Second Best Bachelor's Thesis",
+                "description": "University of Oviedo — Second best thesis.",
+                "icon": "medal"
+            },
+            {
+                "title": "Best Thesis - Capgemini Chair",
+                "description": "Capgemini Chair for Sustainable Digital Transformation.",
+                "icon": "award"
+            }
+        ]
+    },
+    "publications": {
+        "title": "Publications",
+        "orcid_label": "ORCID Profile",
+        "items": [
+            {
+                "title": "Sentiment Analysis and Classification of Hotel Opinions in Twitter With the Transformer Architecture",
+                "journal": "International Journal of Interactive Multimedia and Artificial Intelligence",
+                "year": "2023",
+                "doi": "10.9781/ijimai.2023.02.005",
+                "issn": "1989-1660",
+                "authors": [
+                    "Sergio Arroni",
+                    "Yerai Galán",
+                    "Xiomarah Guzmán-Guzmán",
+                    "Edward Rolando Nuñez-Valdez",
+                    "Alberto Gómez"
+                ]
+            },
+            {
+                "title": "Apollon: A robust defense system against Adversarial Machine Learning attacks in Intrusion Detection Systems",
+                "journal": "Computers & Security",
+                "year": "2023",
+                "doi": "10.1016/j.cose.2023.103546",
+                "issn": "0167-4048",
+                "authors": [
+                    "Antonio Paya",
+                    "Sergio Arroni",
+                    "Vicente García-Díaz",
+                    "Alberto Gómez"
+                ]
+            }
+        ]
+    },
+    "contact": {
+        "title": "Contact",
+        "subtitle": "Interested in collaborating? Don't hesitate to reach out.",
+        "email_label": "Email",
+        "footer_text": "Built with Astro",
+        "rights": "All rights reserved."
+    }
+}

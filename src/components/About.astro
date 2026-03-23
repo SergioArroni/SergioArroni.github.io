@@ -1,0 +1,83 @@
+---
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const focusAreas = [
+  {
+    key: 'optimization' as const,
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+    color: 'from-yellow-500/20 to-amber-500/20',
+    border: 'border-yellow-500/20 hover:border-yellow-500/40',
+    iconColor: 'text-yellow-400',
+  },
+  {
+    key: 'nlp' as const,
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
+    color: 'from-teal-500/20 to-emerald-500/20',
+    border: 'border-teal-500/20 hover:border-teal-500/40',
+    iconColor: 'text-teal-400',
+  },
+  {
+    key: 'mlops' as const,
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
+    color: 'from-cyan-500/20 to-blue-500/20',
+    border: 'border-cyan-500/20 hover:border-cyan-500/40',
+    iconColor: 'text-cyan-400',
+  },
+  {
+    key: 'xai' as const,
+    icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`,
+    color: 'from-pink-500/20 to-rose-500/20',
+    border: 'border-pink-500/20 hover:border-pink-500/40',
+    iconColor: 'text-pink-400',
+  },
+];
+---
+
+<section id="about" class="relative py-24 md:py-32">
+  <div class="section-container relative z-10">
+    <!-- Section Title -->
+    <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
+      <span class="gradient-text">{t.about.title}</span>
+    </h2>
+
+    <!-- Description -->
+    <div class="max-w-3xl mx-auto mb-16">
+      <p class="text-neural-muted text-lg leading-relaxed text-center">
+        {t.about.description}
+      </p>
+    </div>
+
+    <!-- Focus Areas -->
+    <h3 class="text-xl font-semibold text-neural-text mb-8 text-center">{t.about.focus_areas.title}</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      {focusAreas.map((area) => (
+        <div class={`glass-card p-6 border ${area.border} transition-all duration-300 hover:glow-border group`}>
+          <div class="flex items-start gap-4">
+            <div class={`p-2 rounded-lg bg-gradient-to-br ${area.color} ${area.iconColor} shrink-0`}>
+              <Fragment set:html={area.icon} />
+            </div>
+            <div>
+              <h4 class="font-semibold text-neural-text mb-2 group-hover:text-neural-nature transition-colors">
+                {t.about.focus_areas[area.key].title}
+              </h4>
+              <p class="text-neural-muted text-sm leading-relaxed">
+                {t.about.focus_areas[area.key].description}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Decorative vine separator -->
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neural-nature/20 to-transparent"></div>
+</section>

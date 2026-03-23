@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import ParticleBackground from '../components/ParticleBackground.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import SkillGraph from '../components/SkillGraph.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
+import Awards from '../components/Awards.astro';
+import Publications from '../components/Publications.astro';
+import Contact from '../components/Contact.astro';
+
+const lang = 'es' as const;
+---
+
+<BaseLayout lang={lang}>
+  <ParticleBackground />
+  <Navbar lang={lang} />
+  <main class="relative z-10">
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <SkillGraph lang={lang} />
+    <Experience lang={lang} />
+    <Education lang={lang} />
+    <Awards lang={lang} />
+    <Publications lang={lang} />
+    <Contact lang={lang} />
+  </main>
+</BaseLayout>

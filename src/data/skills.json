@@ -1,0 +1,244 @@
+{
+    "categories": [
+        {
+            "id": "generative-ai",
+            "label": {
+                "es": "IA Generativa",
+                "en": "Generative AI"
+            },
+            "color": "#22c55e",
+            "children": [
+                {
+                    "id": "vaes",
+                    "label": "VAEs"
+                },
+                {
+                    "id": "diffusion",
+                    "label": "Diffusion Models"
+                },
+                {
+                    "id": "transformers",
+                    "label": "Transformers"
+                },
+                {
+                    "id": "tabular-gen",
+                    "label": {
+                        "es": "Síntesis Tabular",
+                        "en": "Tabular Synthesis"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "nlp-rag",
+            "label": "NLP & RAG",
+            "color": "#14b8a6",
+            "children": [
+                {
+                    "id": "gemini",
+                    "label": "Gemini"
+                },
+                {
+                    "id": "rag",
+                    "label": "RAG"
+                },
+                {
+                    "id": "langchain",
+                    "label": "LangChain"
+                },
+                {
+                    "id": "sentiment",
+                    "label": {
+                        "es": "Análisis de Sentimiento",
+                        "en": "Sentiment Analysis"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "optimization",
+            "label": {
+                "es": "Optimización",
+                "en": "Optimization"
+            },
+            "color": "#818cf8",
+            "children": [
+                {
+                    "id": "botorch",
+                    "label": "BoTorch"
+                },
+                {
+                    "id": "bayesian",
+                    "label": {
+                        "es": "Opt. Bayesiana",
+                        "en": "Bayesian Opt."
+                    }
+                },
+                {
+                    "id": "genetic",
+                    "label": {
+                        "es": "Alg. Genéticos",
+                        "en": "Genetic Alg."
+                    }
+                },
+                {
+                    "id": "multi-obj",
+                    "label": "Multi-Objective"
+                }
+            ]
+        },
+        {
+            "id": "mlops-cloud",
+            "label": "MLOps & Cloud",
+            "color": "#06b6d4",
+            "children": [
+                {
+                    "id": "aws",
+                    "label": "AWS"
+                },
+                {
+                    "id": "terraform",
+                    "label": "Terraform"
+                },
+                {
+                    "id": "cicd",
+                    "label": "CI/CD"
+                },
+                {
+                    "id": "docker",
+                    "label": "Docker"
+                },
+                {
+                    "id": "gcp",
+                    "label": "GCP"
+                }
+            ]
+        },
+        {
+            "id": "data-science",
+            "label": "Data Science",
+            "color": "#f59e0b",
+            "children": [
+                {
+                    "id": "python",
+                    "label": "Python"
+                },
+                {
+                    "id": "darts",
+                    "label": "Darts"
+                },
+                {
+                    "id": "forecasting",
+                    "label": "Forecasting"
+                },
+                {
+                    "id": "statistics",
+                    "label": {
+                        "es": "Análisis Estadístico",
+                        "en": "Statistical Analysis"
+                    }
+                },
+                {
+                    "id": "etl",
+                    "label": "ETL Pipelines"
+                }
+            ]
+        },
+        {
+            "id": "xai",
+            "label": "XAI",
+            "color": "#ec4899",
+            "children": [
+                {
+                    "id": "shap",
+                    "label": "SHAP"
+                },
+                {
+                    "id": "lime",
+                    "label": "LIME"
+                },
+                {
+                    "id": "interpretability",
+                    "label": {
+                        "es": "Interpretabilidad",
+                        "en": "Interpretability"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "research",
+            "label": {
+                "es": "Investigación",
+                "en": "Research"
+            },
+            "color": "#a855f7",
+            "children": [
+                {
+                    "id": "phd",
+                    "label": "PhD"
+                },
+                {
+                    "id": "papers",
+                    "label": {
+                        "es": "Publicaciones",
+                        "en": "Papers"
+                    }
+                },
+                {
+                    "id": "tabular-ai",
+                    "label": {
+                        "es": "IA Generativa Tabular",
+                        "en": "Tabular Gen. AI"
+                    }
+                }
+            ]
+        }
+    ],
+    "connections": [
+        [
+            "generative-ai",
+            "research"
+        ],
+        [
+            "generative-ai",
+            "data-science"
+        ],
+        [
+            "nlp-rag",
+            "generative-ai"
+        ],
+        [
+            "nlp-rag",
+            "mlops-cloud"
+        ],
+        [
+            "optimization",
+            "data-science"
+        ],
+        [
+            "optimization",
+            "generative-ai"
+        ],
+        [
+            "mlops-cloud",
+            "data-science"
+        ],
+        [
+            "xai",
+            "data-science"
+        ],
+        [
+            "xai",
+            "research"
+        ],
+        [
+            "research",
+            "nlp-rag"
+        ],
+        [
+            "research",
+            "optimization"
+        ]
+    ]
+}

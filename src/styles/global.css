@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: #22c55e33 #0a0f1e;
+    }
+
+    body {
+        @apply bg-neural-bg text-neural-text font-sans antialiased;
+    }
+
+    ::selection {
+        @apply bg-neural-nature/30 text-white;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0a0f1e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #22c55e33;
+        border-radius: 3px;
+    }
+}
+
+@layer components {
+    .section-container {
+        @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    .glass-card {
+        @apply bg-neural-bg-card/60 backdrop-blur-md border border-neural-nature/10 rounded-xl;
+    }
+
+    .glow-text {
+        text-shadow: 0 0 20px rgba(34, 197, 94, 0.3), 0 0 40px rgba(34, 197, 94, 0.1);
+    }
+
+    .glow-border {
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.1), inset 0 0 15px rgba(34, 197, 94, 0.05);
+    }
+
+    .gradient-text {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-neural-nature via-neural-teal to-neural-cyan;
+        background-size: 200% auto;
+    }
+}
+
+@layer utilities {
+    .animate-delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .animate-delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .animate-delay-300 {
+        animation-delay: 300ms;
+    }
+
+    .animate-delay-400 {
+        animation-delay: 400ms;
+    }
+
+    .animate-delay-500 {
+        animation-delay: 500ms;
+    }
+}

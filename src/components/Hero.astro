@@ -1,0 +1,75 @@
+---
+import type { Lang } from '../i18n/utils';
+import { useTranslations, getCvPath } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const cvPath = getCvPath(lang);
+---
+
+<section id="hero" class="relative min-h-screen flex items-center justify-center pt-16">
+  <div class="section-container text-center relative z-10">
+    <!-- Greeting -->
+    <p class="text-neural-muted text-lg md:text-xl mb-3 opacity-0 animate-fade-in-up">
+      {t.hero.greeting}
+    </p>
+
+    <!-- Name -->
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 opacity-0 animate-fade-in-up animate-delay-100">
+      <span class="gradient-text glow-text animate-gradient-shift" style="background-size: 200% auto;">
+        {t.hero.name}
+      </span>
+    </h1>
+
+    <!-- Role -->
+    <h2 class="text-xl md:text-2xl lg:text-3xl text-neural-cyan font-light mb-2 opacity-0 animate-fade-in-up animate-delay-200">
+      {t.hero.role}
+    </h2>
+
+    <!-- Subtitle -->
+    <p class="text-neural-muted text-base md:text-lg mb-2 opacity-0 animate-fade-in-up animate-delay-300 font-mono text-sm">
+      {t.hero.subtitle}
+    </p>
+
+    <!-- Location -->
+    <p class="text-neural-muted/60 text-sm mb-10 opacity-0 animate-fade-in-up animate-delay-400 flex items-center justify-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      {t.hero.location}
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in-up animate-delay-500">
+      <a
+        href={cvPath}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-8 py-3 bg-neural-nature/10 border border-neural-nature/30 text-neural-nature rounded-full font-medium hover:bg-neural-nature/20 hover:border-neural-nature/60 transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.2)] flex items-center justify-center gap-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        {t.hero.cta_cv}
+      </a>
+      <a
+        href="#contact"
+        class="px-8 py-3 border border-neural-muted/30 text-neural-muted rounded-full font-medium hover:text-neural-cyan hover:border-neural-cyan/40 transition-all"
+      >
+        {t.hero.cta_contact}
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
+    <svg class="w-6 h-6 text-neural-nature/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>

@@ -1,0 +1,213 @@
+{
+    "nav": {
+        "about": "Sobre mí",
+        "skills": "Competencias",
+        "experience": "Experiencia",
+        "education": "Educación",
+        "awards": "Premios",
+        "publications": "Publicaciones",
+        "contact": "Contacto"
+    },
+    "hero": {
+        "greeting": "Hola, soy",
+        "name": "Sergio Arroni del Riego",
+        "role": "AI Architect & Researcher",
+        "subtitle": "Doctorando Industrial en Sistemas Inteligentes",
+        "location": "Gijón, Asturias, España",
+        "cta_cv": "Descargar CV",
+        "cta_contact": "Contactar"
+    },
+    "about": {
+        "title": "Sobre Mí",
+        "description": "Perfil en la intersección entre la investigación aplicada y la ingeniería práctica. Combino mi labor investigadora con una posición a jornada completa, participando en todo el ciclo de desarrollo: desde el diseño algorítmico en Python hasta el despliegue en producción.",
+        "focus_areas": {
+            "title": "Áreas de Foco",
+            "optimization": {
+                "title": "Algoritmia y Optimización",
+                "description": "Implementación de soluciones basadas en Optimización Bayesiana (BoTorch), algoritmos evolutivos y forecasting de series temporales."
+            },
+            "nlp": {
+                "title": "IA y Lenguaje",
+                "description": "Diseño de arquitecturas RAG con Gemini (GCP) para procesar información compleja."
+            },
+            "mlops": {
+                "title": "Infraestructura y MLOps",
+                "description": "Gestión de infraestructura en AWS mediante Terraform para asegurar escalabilidad y eficiencia."
+            },
+            "xai": {
+                "title": "IA Explicable (XAI)",
+                "description": "Aplicación de técnicas de interpretabilidad para hacer que modelos complejos sean útiles y transparentes en la toma de decisiones de negocio."
+            }
+        }
+    },
+    "skills": {
+        "title": "Competencias",
+        "subtitle": "Haz clic en las categorías para explorar las tecnologías. Arrastra los nodos para reorganizar el grafo.",
+        "hint_mobile": "Toca las categorías para expandirlas."
+    },
+    "experience": {
+        "title": "Experiencia",
+        "roles": [
+            {
+                "company": "TheNextPangea S.L.",
+                "role": "AI Architect & Researcher",
+                "period": "Agosto 2023 – Presente",
+                "description": "Rol híbrido en organización líquida, combinando desarrollo de producto con coordinación técnica de equipos multidisciplinares.",
+                "highlights": [
+                    "Transferencia tecnológica: llevar investigación de vanguardia a sistemas funcionales con impacto en negocio.",
+                    "I+D en IA Generativa Tabular: VAEs, Diffusion Models y Transformers para síntesis de datos.",
+                    "Optimización mono y multi-objetivo con BoTorch y algoritmos genéticos.",
+                    "MVP de NLP basado en RAG con Gemini en Google Cloud.",
+                    "Pipelines ETL y modelos predictivos con la librería Darts.",
+                    "Gestión autónoma de infraestructura mediante Terraform (IaC) y CI/CD en AWS.",
+                    "Liderazgo en redacción técnica para propuestas de proyectos públicos."
+                ],
+                "tags": [
+                    "Python",
+                    "BoTorch",
+                    "RAG",
+                    "Gemini",
+                    "AWS",
+                    "Terraform",
+                    "Darts",
+                    "CI/CD"
+                ]
+            },
+            {
+                "company": "Fundación Universidad de Oviedo (FUO)",
+                "role": "Beca de Investigación en Machine Learning",
+                "period": "Noviembre 2021 – Julio 2023",
+                "description": "Investigación aplicada en Machine Learning, contribuyendo a proyectos de investigación y publicaciones científicas.",
+                "highlights": [
+                    "Investigación en análisis de sentimiento con arquitecturas Transformer.",
+                    "Desarrollo de sistemas de defensa contra ataques adversarios en IDS.",
+                    "Publicación de 2 artículos en revistas indexadas internacionales."
+                ],
+                "tags": [
+                    "Machine Learning",
+                    "NLP",
+                    "Transformers",
+                    "Python",
+                    "Investigación"
+                ]
+            },
+            {
+                "company": "Universidad de Oviedo",
+                "role": "Becario de Servicios Informáticos",
+                "period": "Septiembre 2020 – Junio 2021",
+                "description": "Soporte técnico y gestión de infraestructura informática universitaria.",
+                "highlights": [
+                    "Soporte técnico y gestión de infraestructura IT.",
+                    "Automatización de tareas de administración de sistemas."
+                ],
+                "tags": [
+                    "IT",
+                    "Administración de Sistemas",
+                    "Soporte Técnico"
+                ]
+            }
+        ]
+    },
+    "education": {
+        "title": "Educación",
+        "degrees": [
+            {
+                "degree": "Doctorado (PhD)",
+                "field": "Sistemas Inteligentes",
+                "institution": "Universidad de Oviedo",
+                "period": "Septiembre 2024 – Presente",
+                "focus": "IA Generativa Tabular"
+            },
+            {
+                "degree": "Máster",
+                "field": "Inteligencia Artificial",
+                "institution": "Universidad Politécnica de Madrid",
+                "period": "Septiembre 2023 – Junio 2024",
+                "focus": ""
+            },
+            {
+                "degree": "Grado",
+                "field": "Ingeniería Informática",
+                "institution": "Universidad de Oviedo",
+                "period": "Septiembre 2019 – Junio 2023",
+                "focus": ""
+            }
+        ],
+        "certifications_title": "Certificaciones",
+        "certifications": [
+            {
+                "name": "Machine Learning",
+                "issuer": "Stanford University"
+            },
+            {
+                "name": "Introducción a Deep Learning & Neural Networks con Keras",
+                "issuer": "IBM"
+            }
+        ]
+    },
+    "awards": {
+        "title": "Premios y Reconocimientos",
+        "items": [
+            {
+                "title": "Ganador Hackathon HP",
+                "description": "\"La España Vacía\" — Primer premio en hackathon organizado por HP.",
+                "icon": "trophy"
+            },
+            {
+                "title": "Mejor Trabajo de Fin de Estudios",
+                "description": "Universidad de Oviedo — Mejor TFG de la promoción.",
+                "icon": "star"
+            },
+            {
+                "title": "Segundo Mejor TFG",
+                "description": "Universidad de Oviedo — Segundo mejor Trabajo de Fin de Estudios.",
+                "icon": "medal"
+            },
+            {
+                "title": "Mejor TFG Cátedra Capgemini",
+                "description": "Cátedra Capgemini para la Transformación Digital Sostenible.",
+                "icon": "award"
+            }
+        ]
+    },
+    "publications": {
+        "title": "Publicaciones",
+        "orcid_label": "Perfil ORCID",
+        "items": [
+            {
+                "title": "Sentiment Analysis and Classification of Hotel Opinions in Twitter With the Transformer Architecture",
+                "journal": "International Journal of Interactive Multimedia and Artificial Intelligence",
+                "year": "2023",
+                "doi": "10.9781/ijimai.2023.02.005",
+                "issn": "1989-1660",
+                "authors": [
+                    "Sergio Arroni",
+                    "Yerai Galán",
+                    "Xiomarah Guzmán-Guzmán",
+                    "Edward Rolando Nuñez-Valdez",
+                    "Alberto Gómez"
+                ]
+            },
+            {
+                "title": "Apollon: A robust defense system against Adversarial Machine Learning attacks in Intrusion Detection Systems",
+                "journal": "Computers & Security",
+                "year": "2023",
+                "doi": "10.1016/j.cose.2023.103546",
+                "issn": "0167-4048",
+                "authors": [
+                    "Antonio Paya",
+                    "Sergio Arroni",
+                    "Vicente García-Díaz",
+                    "Alberto Gómez"
+                ]
+            }
+        ]
+    },
+    "contact": {
+        "title": "Contacto",
+        "subtitle": "¿Interesado en colaborar? No dudes en contactarme.",
+        "email_label": "Email",
+        "footer_text": "Construido con Astro",
+        "rights": "Todos los derechos reservados."
+    }
+}

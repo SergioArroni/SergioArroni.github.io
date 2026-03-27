@@ -1,7 +1,7 @@
 ---
-import type { Lang } from '../i18n/utils';
-import { useTranslations } from '../i18n/utils';
-import skillsData from '../data/skills.json';
+import type { Lang } from "../i18n/utils";
+import { useTranslations } from "../i18n/utils";
+import skillsData from "../data/skills.json";
 
 interface Props {
   lang: Lang;
@@ -16,65 +16,101 @@ const t = useTranslations(lang);
     <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">
       <span class="gradient-text">{t.skills.title}</span>
     </h2>
-    <p class="text-neural-muted text-center mb-4 max-w-xl mx-auto text-sm">
+    <p class="text-neural-muted text-center mb-8 max-w-xl mx-auto text-sm">
       {t.skills.subtitle}
     </p>
-    <p class="text-neural-muted/50 text-center mb-12 md:hidden text-xs">
-      {t.skills.hint_mobile}
-    </p>
 
-    <div id="skill-graph-container" class="w-full max-w-5xl mx-auto relative" style="min-height: 500px;">
-      <svg id="skill-graph" class="w-full" style="min-height: 500px;"></svg>
+    <!-- Side labels -->
+    <div class="flex justify-between max-w-5xl mx-auto mb-2 px-4">
+      <span
+        class="text-xs font-mono uppercase tracking-widest text-neural-nature/50"
+        >AI & Research</span
+      >
+      <span
+        class="text-xs font-mono uppercase tracking-widest text-neural-cyan/50"
+        >Engineering</span
+      >
     </div>
+
+    <div
+      id="skill-graph-container"
+      class="w-full max-w-5xl mx-auto relative"
+      style="min-height: 550px;"
+    >
+      <svg id="skill-graph" class="w-full" style="min-height: 550px;"></svg>
+    </div>
+    <script
+      id="skill-graph-data"
+      type="application/json"
+      set:html={JSON.stringify({
+        categories: skillsData.categories,
+        connections: skillsData.connections,
+        lang,
+      })}
+    />
   </div>
 
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neural-nature/20 to-transparent"></div>
+  <div
+    class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neural-nature/20 to-transparent"
+  >
+  </div>
 </section>
 
-<script define:vars={{ skillsData, lang }}>
-  // Store data for use in the client-side script
-  window.__skillsData = skillsData;
-  window.__skillsLang = lang;
-</script>
-
 <script>
-  async function initGraph() {
-    const d3 = await import('d3');
-    const data = (window as any).__skillsData;
-    const lang = (window as any).__skillsLang || 'es';
-
-    function getLabel(label: any): string {
-      if (typeof label === 'string') return label;
-      return label[lang] || label['es'] || '';
+  (async function () {
+    // Wait for full page load so CSS layout is computed and container has real width
+    if (document.readyState !== "complete") {
+      await new Promise<void>((r) =>
+        window.addEventListener("load", () => r(), { once: true }),
+      );
     }
 
-    const container = document.getElementById('skill-graph-container')!;
-    const svg = d3.select('#skill-graph');
-    svg.selectAll('*').remove();
+    const d3 = await import("d3");
 
-    const rect = container.getBoundingClientRect();
-    const width = rect.width;
-    const height = Math.max(500, Math.min(700, window.innerHeight * 0.6));
+    const dataEl = document.getElementById("skill-graph-data");
+    if (!dataEl || !dataEl.textContent) return;
+    const payload = JSON.parse(dataEl.textContent);
+    const data = {
+      categories: payload.categories,
+      connections: payload.connections,
+    };
+    const lang = payload.lang || "es";
 
-    svg.attr('viewBox', `0 0 ${width} ${height}`).attr('width', width).attr('height', height);
+    function getLabel(label: any): string {
+      if (typeof label === "string") return label;
+      return label[lang] || label["es"] || "";
+    }
 
-    // Build nodes and links
-    interface GraphNode extends d3.SimulationNodeDatum {
+    const container = document.getElementById("skill-graph-container");
+    if (!container) return;
+    const svg = d3.select("#skill-graph");
+    svg.selectAll("*").remove();
+
+    let width = container.clientWidth || container.offsetWidth || 900;
+    let height = Math.max(550, Math.min(750, window.innerHeight * 0.65));
+
+    svg
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("width", width)
+      .attr("height", height);
+
+    interface GraphNode {
       id: string;
       label: string;
       color: string;
       radius: number;
       isCategory: boolean;
       parentId?: string;
-      expanded?: boolean;
+      side: "ai" | "eng";
       visible: boolean;
-      fx?: number | null;
-      fy?: number | null;
+      hasChildren: boolean;
+      x: number;
+      y: number;
     }
 
-    interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
-      source: string | GraphNode;
-      target: string | GraphNode;
+    interface GraphLink {
+      source: string;
+      target: string;
       isParentChild: boolean;
     }
 
@@ -82,337 +118,437 @@ const t = useTranslations(lang);
     const links: GraphLink[] = [];
     const expandedCategories = new Set<string>();
 
-    // Category nodes
+    const aiCategories: string[] = [];
+    const engCategories: string[] = [];
+
     data.categories.forEach((cat: any) => {
+      const side = cat.side === "eng" ? "eng" : "ai";
+      if (side === "ai") aiCategories.push(cat.id);
+      else engCategories.push(cat.id);
+
+      const hasChildren = cat.children && cat.children.length > 0;
       nodes.push({
         id: cat.id,
         label: getLabel(cat.label),
         color: cat.color,
         radius: 35,
         isCategory: true,
-        expanded: false,
+        side,
         visible: true,
+        hasChildren,
+        x: 0,
+        y: 0,
       });
 
-      // Child nodes (hidden initially)
-      cat.children.forEach((child: any) => {
-        nodes.push({
-          id: child.id,
-          label: getLabel(child.label),
-          color: cat.color,
-          radius: 18,
-          isCategory: false,
-          parentId: cat.id,
-          visible: false,
+      if (cat.children) {
+        cat.children.forEach((child: any) => {
+          nodes.push({
+            id: child.id,
+            label: getLabel(child.label),
+            color: cat.color,
+            radius: 18,
+            isCategory: false,
+            parentId: cat.id,
+            side,
+            visible: false,
+            hasChildren: false,
+            x: 0,
+            y: 0,
+          });
+          links.push({
+            source: cat.id,
+            target: child.id,
+            isParentChild: true,
+          });
         });
-
-        // Parent-child link
-        links.push({
-          source: cat.id,
-          target: child.id,
-          isParentChild: true,
-        });
-      });
+      }
     });
 
-    // Category-to-category connections
     data.connections.forEach((conn: [string, string]) => {
-      links.push({
-        source: conn[0],
-        target: conn[1],
-        isParentChild: false,
-      });
+      links.push({ source: conn[0], target: conn[1], isParentChild: false });
     });
 
-    // SVG groups
-    const defs = svg.append('defs');
+    // --- Hexagonal layout ---
+    function hexagonPositions(
+      count: number,
+      cx: number,
+      cy: number,
+      r: number,
+    ): [number, number][] {
+      const pts: [number, number][] = [];
+      for (let i = 0; i < count; i++) {
+        const angle = -Math.PI / 2 + (i / count) * Math.PI * 2;
+        pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
+      }
+      return pts;
+    }
 
-    // Glow filter
-    const filter = defs.append('filter').attr('id', 'glow');
-    filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
-    const feMerge = filter.append('feMerge');
-    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+    function assignNodePositions() {
+      const cy = height / 2;
+      const lx = width * 0.27;
+      const rx = width * 0.73;
+      const rAi = Math.min(width * 0.2, height * 0.32);
+      const rEng = Math.min(width * 0.2, height * 0.32);
 
-    const linkGroup = svg.append('g').attr('class', 'links');
-    const nodeGroup = svg.append('g').attr('class', 'nodes');
+      const aiPos = hexagonPositions(aiCategories.length, lx, cy, rAi);
+      aiCategories.forEach((catId, i) => {
+        const node = nodes.find((n) => n.id === catId);
+        if (!node) return;
+        node.x = aiPos[i][0];
+        node.y = aiPos[i][1];
+        placeChildren(node, Math.atan2(node.y - cy, node.x - lx));
+      });
 
-    // Force simulation
-    const simulation = d3
-      .forceSimulation<GraphNode>()
-      .force(
-        'link',
-        d3
-          .forceLink<GraphNode, GraphLink>()
-          .id((d) => d.id)
-          .distance((d) => (d.isParentChild ? 70 : 150))
-          .strength((d) => (d.isParentChild ? 0.8 : 0.2))
+      const engPos = hexagonPositions(engCategories.length, rx, cy, rEng);
+      engCategories.forEach((catId, i) => {
+        const node = nodes.find((n) => n.id === catId);
+        if (!node) return;
+        node.x = engPos[i][0];
+        node.y = engPos[i][1];
+        placeChildren(node, Math.atan2(node.y - cy, node.x - rx));
+      });
+    }
+
+    function placeChildren(parent: GraphNode, outAngle: number) {
+      const children = nodes.filter(
+        (n) => n.parentId === parent.id && n.visible,
+      );
+      if (!children.length) return;
+      const spread = Math.PI * 0.6;
+      const childR = 75;
+      children.forEach((child, i) => {
+        const a =
+          outAngle - spread / 2 + ((i + 1) / (children.length + 1)) * spread;
+        child.x = parent.x + Math.cos(a) * childR;
+        child.y = parent.y + Math.sin(a) * childR;
+      });
+    }
+
+    assignNodePositions();
+
+    // --- SVG defs ---
+    const defs = svg.append("defs");
+    const filter = defs.append("filter").attr("id", "glow");
+    filter
+      .append("feGaussianBlur")
+      .attr("stdDeviation", "4")
+      .attr("result", "coloredBlur");
+    const feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode").attr("in", "coloredBlur");
+    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Hexagon outlines
+    function hexPath(cx: number, cy: number, r: number, count: number): string {
+      const pts = hexagonPositions(count, cx, cy, r);
+      return (
+        pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ") +
+        " Z"
+      );
+    }
+
+    svg
+      .append("path")
+      .attr(
+        "d",
+        hexPath(
+          width * 0.27,
+          height / 2,
+          Math.min(width * 0.2, height * 0.32) + 15,
+          aiCategories.length,
+        ),
       )
-      .force('charge', d3.forceManyBody().strength(-300))
-      .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide<GraphNode>().radius((d) => d.radius + 10))
-      .force('x', d3.forceX(width / 2).strength(0.05))
-      .force('y', d3.forceY(height / 2).strength(0.05));
+      .attr("fill", "none")
+      .attr("stroke", "#22c55e")
+      .attr("stroke-opacity", 0.06)
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4,6");
+
+    svg
+      .append("path")
+      .attr(
+        "d",
+        hexPath(
+          width * 0.73,
+          height / 2,
+          Math.min(width * 0.2, height * 0.32) + 15,
+          engCategories.length,
+        ),
+      )
+      .attr("fill", "none")
+      .attr("stroke", "#06b6d4")
+      .attr("stroke-opacity", 0.06)
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4,6");
+
+    // Divider
+    svg
+      .append("line")
+      .attr("x1", width / 2)
+      .attr("y1", 20)
+      .attr("x2", width / 2)
+      .attr("y2", height - 20)
+      .attr("stroke", "#22c55e")
+      .attr("stroke-opacity", 0.08)
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "6,8")
+      .attr("class", "divider");
+
+    const linkGroup = svg.append("g").attr("class", "links");
+    const nodeGroup = svg.append("g").attr("class", "nodes");
 
     function getVisibleNodes() {
       return nodes.filter((n) => n.visible);
     }
-
     function getVisibleLinks() {
-      const visibleIds = new Set(getVisibleNodes().map((n) => n.id));
-      return links.filter((l) => {
-        const sourceId = typeof l.source === 'string' ? l.source : l.source.id;
-        const targetId = typeof l.target === 'string' ? l.target : l.target.id;
-        return visibleIds.has(sourceId) && visibleIds.has(targetId);
-      });
+      const ids = new Set(getVisibleNodes().map((n) => n.id));
+      return links.filter((l) => ids.has(l.source) && ids.has(l.target));
+    }
+    function nodeById(id: string) {
+      return nodes.find((n) => n.id === id);
     }
 
-    function update() {
+    function toggleCategory(catId: string) {
+      if (expandedCategories.has(catId)) {
+        expandedCategories.delete(catId);
+        nodes.forEach((n) => {
+          if (n.parentId === catId) n.visible = false;
+        });
+      } else {
+        expandedCategories.add(catId);
+        nodes.forEach((n) => {
+          if (n.parentId === catId) n.visible = true;
+        });
+      }
+      render();
+    }
+
+    function render() {
+      assignNodePositions();
       const visibleNodes = getVisibleNodes();
       const visibleLinks = getVisibleLinks();
 
       // Links
       const linkSel = linkGroup
-        .selectAll<SVGLineElement, GraphLink>('line')
-        .data(visibleLinks, (d: any) => {
-          const sId = typeof d.source === 'string' ? d.source : d.source.id;
-          const tId = typeof d.target === 'string' ? d.target : d.target.id;
-          return `${sId}-${tId}`;
-        });
-
-      linkSel.exit().transition().duration(300).attr('opacity', 0).remove();
-
+        .selectAll<SVGLineElement, GraphLink>("line")
+        .data(visibleLinks, (d: any) => `${d.source}-${d.target}`);
+      linkSel
+        .exit()
+        .transition("exit")
+        .duration(300)
+        .attr("opacity", 0)
+        .remove();
       const linkEnter = linkSel
         .enter()
-        .append('line')
-        .attr('stroke', (d: GraphLink) => {
-          if (d.isParentChild) {
-            const parentNode = nodes.find(
-              (n) => n.id === (typeof d.source === 'string' ? d.source : (d.source as GraphNode).id)
-            );
-            return parentNode ? parentNode.color : '#22c55e';
-          }
-          return '#22c55e';
-        })
-        .attr('stroke-opacity', 0)
-        .attr('stroke-width', (d: GraphLink) => (d.isParentChild ? 1 : 1.5))
-        .attr('stroke-dasharray', (d: GraphLink) => (d.isParentChild ? '4,4' : 'none'));
+        .append("line")
+        .attr("stroke", (d) => nodeById(d.source)?.color ?? "#22c55e")
+        .attr("stroke-opacity", 0)
+        .attr("stroke-width", (d) => (d.isParentChild ? 1 : 1.5))
+        .attr("stroke-dasharray", (d) => (d.isParentChild ? "4,4" : "none"))
+        .attr("x1", (d) => nodeById(d.source)?.x ?? 0)
+        .attr("y1", (d) => nodeById(d.source)?.y ?? 0)
+        .attr("x2", (d) => nodeById(d.target)?.x ?? 0)
+        .attr("y2", (d) => nodeById(d.target)?.y ?? 0);
+      linkEnter
+        .transition("enter")
+        .duration(500)
+        .attr("stroke-opacity", (d) => (d.isParentChild ? 0.3 : 0.15));
 
-      linkEnter.transition().duration(500).attr('stroke-opacity', (d: GraphLink) => (d.isParentChild ? 0.3 : 0.15));
+      linkEnter
+        .merge(linkSel)
+        .transition("position")
+        .duration(400)
+        .attr("x1", (d: any) => nodeById(d.source)?.x ?? 0)
+        .attr("y1", (d: any) => nodeById(d.source)?.y ?? 0)
+        .attr("x2", (d: any) => nodeById(d.target)?.x ?? 0)
+        .attr("y2", (d: any) => nodeById(d.target)?.y ?? 0);
 
       // Nodes
       const nodeSel = nodeGroup
-        .selectAll<SVGGElement, GraphNode>('g.node')
+        .selectAll<SVGGElement, GraphNode>("g.node")
         .data(visibleNodes, (d: GraphNode) => d.id);
+      nodeSel
+        .exit()
+        .transition("exit")
+        .duration(300)
+        .attr("opacity", 0)
+        .remove();
 
-      nodeSel.exit().transition().duration(300).attr('opacity', 0).attr('transform', 'scale(0)').remove();
+      const ne = nodeSel
+        .enter()
+        .append("g")
+        .attr("class", "node")
+        .attr("opacity", 0)
+        .attr("transform", (d) => `translate(${d.x},${d.y})`)
+        .style("cursor", (d) =>
+          d.isCategory && d.hasChildren ? "pointer" : "default",
+        );
 
-      const nodeEnter = nodeSel.enter().append('g').attr('class', 'node').attr('opacity', 0).style('cursor', 'pointer');
+      ne.append("circle")
+        .attr("r", (d) => d.radius)
+        .attr("fill", (d) => `${d.color}15`)
+        .attr("stroke", (d) => d.color)
+        .attr("stroke-width", (d) => (d.isCategory ? 2 : 1))
+        .attr("stroke-opacity", (d) => (d.isCategory ? 0.6 : 0.4))
+        .attr("filter", (d) => (d.isCategory ? "url(#glow)" : "none"));
 
-      // Circle
-      nodeEnter
-        .append('circle')
-        .attr('r', (d) => d.radius)
-        .attr('fill', (d) => {
-          const hex = d.color;
-          return `${hex}15`;
-        })
-        .attr('stroke', (d) => d.color)
-        .attr('stroke-width', (d) => (d.isCategory ? 2 : 1))
-        .attr('stroke-opacity', (d) => (d.isCategory ? 0.6 : 0.4))
-        .attr('filter', (d) => (d.isCategory ? 'url(#glow)' : 'none'));
-
-      // Label
-      nodeEnter
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dy', (d) => (d.isCategory ? '0.35em' : '0.35em'))
-        .attr('fill', (d) => (d.isCategory ? d.color : '#e2e8f0'))
-        .attr('font-size', (d) => (d.isCategory ? '11px' : '9px'))
-        .attr('font-weight', (d) => (d.isCategory ? '600' : '400'))
-        .attr('font-family', 'Inter, system-ui, sans-serif')
-        .attr('pointer-events', 'none')
+      ne.append("text")
+        .attr("class", "node-label")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .attr("fill", (d) => (d.isCategory ? d.color : "#e2e8f0"))
+        .attr("font-size", (d) => (d.isCategory ? "11px" : "9px"))
+        .attr("font-weight", (d) => (d.isCategory ? "600" : "400"))
+        .attr("font-family", "Inter, system-ui, sans-serif")
+        .attr("pointer-events", "none")
         .each(function (d) {
-          const text = d3.select(this);
-          const words = d.label.split(/\s+/);
-          if (words.length > 1 && d.isCategory) {
-            text.text('');
-            words.forEach((word: string, i: number) => {
-              text
-                .append('tspan')
-                .attr('x', 0)
-                .attr('dy', i === 0 ? `-${(words.length - 1) * 0.3}em` : '1.1em')
+          const t = d3.select(this);
+          const w = d.label.split(/\s+/);
+          if (w.length > 1 && d.isCategory) {
+            t.text("");
+            w.forEach((word: string, i: number) => {
+              t.append("tspan")
+                .attr("x", 0)
+                .attr("dy", i === 0 ? `-${(w.length - 1) * 0.3}em` : "1.1em")
                 .text(word);
             });
           } else {
-            text.text(d.label);
+            t.text(d.label);
           }
         });
 
-      // Expand indicator for categories
-      nodeEnter
-        .filter((d) => d.isCategory)
-        .append('text')
-        .attr('class', 'expand-indicator')
-        .attr('text-anchor', 'middle')
-        .attr('dy', (d) => {
-          const words = d.label.split(/\s+/);
-          return words.length > 1 ? `${words.length * 0.5 + 0.8}em` : '1.8em';
+      ne.filter((d) => d.isCategory && d.hasChildren)
+        .append("text")
+        .attr("class", "expand-indicator")
+        .attr("text-anchor", "middle")
+        .attr("dy", (d) => {
+          const w = d.label.split(/\s+/);
+          return w.length > 1 ? `${w.length * 0.5 + 0.8}em` : "1.8em";
         })
-        .attr('fill', (d) => d.color)
-        .attr('font-size', '8px')
-        .attr('opacity', 0.5)
-        .text((d) => (expandedCategories.has(d.id) ? '−' : '+'));
+        .attr("fill", (d) => d.color)
+        .attr("font-size", "8px")
+        .attr("opacity", 0.5);
 
-      nodeEnter.transition().duration(500).attr('opacity', 1);
+      ne.transition("enter").duration(500).attr("opacity", 1);
+
+      // Update expand indicators on active nodes
+      const allN = ne.merge(nodeSel);
+      allN
+        .select(".expand-indicator")
+        .text((d: any) =>
+          d.isCategory && d.hasChildren
+            ? expandedCategories.has(d.id)
+              ? "−"
+              : "+"
+            : "",
+        );
 
       // Interactions
-      const allNodes = nodeGroup.selectAll<SVGGElement, GraphNode>('g.node');
-
-      // Hover effects
-      allNodes
-        .on('mouseenter', function (event, d) {
-          // Highlight this node
-          d3.select(this).select('circle').transition().duration(200).attr('stroke-opacity', 1).attr('stroke-width', 3);
-
-          // Dim others
-          allNodes
+      allN
+        .on("mouseenter", function (_e: any, d: GraphNode) {
+          d3.select(this)
+            .select("circle")
+            .transition()
+            .duration(200)
+            .attr("stroke-opacity", 1)
+            .attr("stroke-width", 3);
+          allN
             .filter((n: GraphNode) => n.id !== d.id)
             .transition()
             .duration(200)
-            .attr('opacity', (n: GraphNode) => {
-              const isConnected = visibleLinks.some((l) => {
-                const sId = typeof l.source === 'string' ? l.source : l.source.id;
-                const tId = typeof l.target === 'string' ? l.target : l.target.id;
-                return (sId === d.id && tId === n.id) || (tId === d.id && sId === n.id);
-              });
-              return isConnected ? 0.9 : 0.2;
-            });
-
-          // Highlight connected links
+            .attr("opacity", (n: GraphNode) =>
+              visibleLinks.some(
+                (l) =>
+                  (l.source === d.id && l.target === n.id) ||
+                  (l.target === d.id && l.source === n.id),
+              )
+                ? 0.9
+                : 0.2,
+            );
           linkGroup
-            .selectAll('line')
+            .selectAll<SVGLineElement, GraphLink>("line")
             .transition()
             .duration(200)
-            .attr('stroke-opacity', (l: any) => {
-              const sId = typeof l.source === 'string' ? l.source : l.source.id;
-              const tId = typeof l.target === 'string' ? l.target : l.target.id;
-              return sId === d.id || tId === d.id ? 0.6 : 0.03;
-            });
+            .attr("stroke-opacity", (l: any) =>
+              l.source === d.id || l.target === d.id ? 0.6 : 0.03,
+            );
         })
-        .on('mouseleave', function () {
-          allNodes.transition().duration(200).attr('opacity', 1);
-          allNodes
-            .selectAll('circle')
+        .on("mouseleave", function () {
+          allN.transition().duration(200).attr("opacity", 1);
+          allN
+            .selectAll("circle")
             .transition()
             .duration(200)
-            .attr('stroke-opacity', (d: any) => (d.isCategory ? 0.6 : 0.4))
-            .attr('stroke-width', (d: any) => (d.isCategory ? 2 : 1));
+            .attr("stroke-opacity", (d: any) => (d.isCategory ? 0.6 : 0.4))
+            .attr("stroke-width", (d: any) => (d.isCategory ? 2 : 1));
           linkGroup
-            .selectAll('line')
+            .selectAll<SVGLineElement, GraphLink>("line")
             .transition()
             .duration(200)
-            .attr('stroke-opacity', (d: any) => (d.isParentChild ? 0.3 : 0.15));
-        });
-
-      // Click to expand/collapse
-      allNodes
-        .filter((d: GraphNode) => d.isCategory)
-        .on('click', function (event, d) {
-          event.stopPropagation();
-
-          if (expandedCategories.has(d.id)) {
-            expandedCategories.delete(d.id);
-            nodes.forEach((n) => {
-              if (n.parentId === d.id) n.visible = false;
-            });
-          } else {
-            expandedCategories.add(d.id);
-            nodes.forEach((n) => {
-              if (n.parentId === d.id) {
-                n.visible = true;
-                n.x = (d.x || width / 2) + (Math.random() - 0.5) * 50;
-                n.y = (d.y || height / 2) + (Math.random() - 0.5) * 50;
-              }
-            });
-          }
-
-          update();
-        });
-
-      // Drag
-      const drag = d3
-        .drag<SVGGElement, GraphNode>()
-        .on('start', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
+            .attr("stroke-opacity", (d: any) => (d.isParentChild ? 0.3 : 0.15));
         })
-        .on('drag', (event, d) => {
-          d.fx = event.x;
-          d.fy = event.y;
-        })
-        .on('end', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
+        .on("click", null);
+
+      allN
+        .filter((d: GraphNode) => d.isCategory && d.hasChildren)
+        .on("click", function (ev: any, d: GraphNode) {
+          ev.stopPropagation();
+          toggleCategory(d.id);
         });
 
-      allNodes.call(drag);
-
-      // Update simulation
-      simulation.nodes(visibleNodes);
-      (simulation.force('link') as d3.ForceLink<GraphNode, GraphLink>).links(visibleLinks);
-      simulation.alpha(0.5).restart();
+      allN
+        .transition("position")
+        .duration(450)
+        .attr("transform", (d) => `translate(${d.x},${d.y})`);
     }
 
-    // Tick
-    simulation.on('tick', () => {
-      linkGroup
-        .selectAll<SVGLineElement, GraphLink>('line')
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
+    render();
 
-      nodeGroup
-        .selectAll<SVGGElement, GraphNode>('g.node')
-        .attr('transform', (d) => `translate(${d.x},${d.y})`);
-    });
-
-    update();
-
-    // Resize handler
-    let resizeTimeout: number;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(() => {
-        const newRect = container.getBoundingClientRect();
-        const newWidth = newRect.width;
-        const newHeight = Math.max(500, Math.min(700, window.innerHeight * 0.6));
-        svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`).attr('width', newWidth).attr('height', newHeight);
-        simulation
-          .force('center', d3.forceCenter(newWidth / 2, newHeight / 2))
-          .force('x', d3.forceX(newWidth / 2).strength(0.05))
-          .force('y', d3.forceY(newHeight / 2).strength(0.05));
-        simulation.alpha(0.3).restart();
+    // Resize
+    let rt: number;
+    window.addEventListener("resize", () => {
+      clearTimeout(rt);
+      rt = window.setTimeout(() => {
+        width = container!.clientWidth || 900;
+        height = Math.max(550, Math.min(750, window.innerHeight * 0.65));
+        svg
+          .attr("viewBox", `0 0 ${width} ${height}`)
+          .attr("width", width)
+          .attr("height", height);
+        svg.selectAll("path[d]").remove();
+        svg
+          .insert("path", ".links")
+          .attr(
+            "d",
+            hexPath(
+              width * 0.27,
+              height / 2,
+              Math.min(width * 0.2, height * 0.32) + 15,
+              aiCategories.length,
+            ),
+          )
+          .attr("fill", "none")
+          .attr("stroke", "#22c55e")
+          .attr("stroke-opacity", 0.06)
+          .attr("stroke-width", 1)
+          .attr("stroke-dasharray", "4,6");
+        svg
+          .insert("path", ".links")
+          .attr(
+            "d",
+            hexPath(
+              width * 0.73,
+              height / 2,
+              Math.min(width * 0.2, height * 0.32) + 15,
+              engCategories.length,
+            ),
+          )
+          .attr("fill", "none")
+          .attr("stroke", "#06b6d4")
+          .attr("stroke-opacity", 0.06)
+          .attr("stroke-width", 1)
+          .attr("stroke-dasharray", "4,6");
+        render();
       }, 250);
     });
-  }
-
-  // Initialize when visible
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          initGraph();
-          observer.disconnect();
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  const graphEl = document.getElementById('skill-graph-container');
-  if (graphEl) observer.observe(graphEl);
+  })();
 </script>

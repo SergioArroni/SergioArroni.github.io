@@ -7,6 +7,7 @@
                 "en": "Generative AI"
             },
             "color": "#22c55e",
+            "side": "ai",
             "children": [
                 {
                     "id": "vaes",
@@ -33,6 +34,7 @@
             "id": "nlp-rag",
             "label": "NLP & RAG",
             "color": "#14b8a6",
+            "side": "ai",
             "children": [
                 {
                     "id": "gemini",
@@ -62,6 +64,7 @@
                 "en": "Optimization"
             },
             "color": "#818cf8",
+            "side": "ai",
             "children": [
                 {
                     "id": "botorch",
@@ -88,41 +91,11 @@
             ]
         },
         {
-            "id": "mlops-cloud",
-            "label": "MLOps & Cloud",
-            "color": "#06b6d4",
-            "children": [
-                {
-                    "id": "aws",
-                    "label": "AWS"
-                },
-                {
-                    "id": "terraform",
-                    "label": "Terraform"
-                },
-                {
-                    "id": "cicd",
-                    "label": "CI/CD"
-                },
-                {
-                    "id": "docker",
-                    "label": "Docker"
-                },
-                {
-                    "id": "gcp",
-                    "label": "GCP"
-                }
-            ]
-        },
-        {
             "id": "data-science",
             "label": "Data Science",
             "color": "#f59e0b",
+            "side": "ai",
             "children": [
-                {
-                    "id": "python",
-                    "label": "Python"
-                },
                 {
                     "id": "darts",
                     "label": "Darts"
@@ -148,6 +121,7 @@
             "id": "xai",
             "label": "XAI",
             "color": "#ec4899",
+            "side": "ai",
             "children": [
                 {
                     "id": "shap",
@@ -173,6 +147,7 @@
                 "en": "Research"
             },
             "color": "#a855f7",
+            "side": "ai",
             "children": [
                 {
                     "id": "phd",
@@ -193,6 +168,126 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "backend",
+            "label": "Backend",
+            "color": "#f97316",
+            "side": "eng",
+            "children": [
+                {
+                    "id": "python",
+                    "label": "Python"
+                },
+                {
+                    "id": "dotnet",
+                    "label": ".NET"
+                },
+                {
+                    "id": "api-rest",
+                    "label": "API REST"
+                },
+                {
+                    "id": "websockets",
+                    "label": "WebSockets"
+                }
+            ]
+        },
+        {
+            "id": "frontend",
+            "label": "Frontend",
+            "color": "#38bdf8",
+            "side": "eng",
+            "children": [
+                {
+                    "id": "astro",
+                    "label": "Astro"
+                },
+                {
+                    "id": "react",
+                    "label": "React"
+                },
+                {
+                    "id": "angular",
+                    "label": "Angular"
+                }
+            ]
+        },
+        {
+            "id": "devops",
+            "label": "DevOps & Cloud",
+            "color": "#06b6d4",
+            "side": "eng",
+            "children": [
+                {
+                    "id": "docker",
+                    "label": "Docker"
+                },
+                {
+                    "id": "terraform",
+                    "label": "Terraform"
+                },
+                {
+                    "id": "aws",
+                    "label": "AWS"
+                },
+                {
+                    "id": "gcp",
+                    "label": "GCP"
+                },
+                {
+                    "id": "cicd",
+                    "label": "CI/CD"
+                }
+            ]
+        },
+        {
+            "id": "databases",
+            "label": {
+                "es": "Bases de Datos",
+                "en": "Databases"
+            },
+            "color": "#a78bfa",
+            "side": "eng",
+            "children": [
+                {
+                    "id": "sql",
+                    "label": {
+                        "es": "BBDD Relacionales",
+                        "en": "Relational DB"
+                    }
+                },
+                {
+                    "id": "influxdb",
+                    "label": "InfluxDB"
+                },
+                {
+                    "id": "grafana",
+                    "label": "Grafana"
+                }
+            ]
+        },
+        {
+            "id": "principles",
+            "label": {
+                "es": "Principios",
+                "en": "Principles"
+            },
+            "color": "#fb7185",
+            "side": "eng",
+            "children": [
+                {
+                    "id": "solid",
+                    "label": "SOLID"
+                },
+                {
+                    "id": "gof",
+                    "label": {
+                        "es": "Patrones GoF",
+                        "en": "GoF Patterns"
+                    }
+                }
+            ]
         }
     ],
     "connections": [
@@ -209,20 +304,12 @@
             "generative-ai"
         ],
         [
-            "nlp-rag",
-            "mlops-cloud"
-        ],
-        [
             "optimization",
             "data-science"
         ],
         [
             "optimization",
             "generative-ai"
-        ],
-        [
-            "mlops-cloud",
-            "data-science"
         ],
         [
             "xai",
@@ -239,6 +326,26 @@
         [
             "research",
             "optimization"
+        ],
+        [
+            "devops",
+            "backend"
+        ],
+        [
+            "devops",
+            "databases"
+        ],
+        [
+            "backend",
+            "databases"
+        ],
+        [
+            "backend",
+            "principles"
+        ],
+        [
+            "frontend",
+            "backend"
         ]
     ]
 }

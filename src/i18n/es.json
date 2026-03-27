@@ -19,31 +19,31 @@
     },
     "about": {
         "title": "Sobre Mí",
-        "description": "Perfil en la intersección entre la investigación aplicada y la ingeniería práctica. Combino mi labor investigadora con una posición a jornada completa, participando en todo el ciclo de desarrollo: desde el diseño algorítmico en Python hasta el despliegue en producción.",
-        "focus_areas": {
-            "title": "Áreas de Foco",
-            "optimization": {
-                "title": "Algoritmia y Optimización",
-                "description": "Implementación de soluciones basadas en Optimización Bayesiana (BoTorch), algoritmos evolutivos y forecasting de series temporales."
+        "description": "Soy AI Architect & Researcher y doctorando industrial en Sistemas Inteligentes, con foco en IA Generativa Tabular. Mi perfil se sitúa en la intersección entre la investigación aplicada y la ingeniería práctica: combino la exploración científica con el desarrollo de soluciones end-to-end, desde la definición del problema y el diseño algorítmico en Python hasta la validación, la optimización y el despliegue en producción.",
+        "soft_skills": {
+            "title": "Soft Skills",
+            "technology_transfer": {
+                "title": "Transferencia Tecnológica",
+                "description": "Capacidad para convertir investigación avanzada en soluciones funcionales, comprensibles y útiles para producto y negocio."
             },
-            "nlp": {
-                "title": "IA y Lenguaje",
-                "description": "Diseño de arquitecturas RAG con Gemini (GCP) para procesar información compleja."
+            "cross_functional": {
+                "title": "Colaboración Multidisciplinar",
+                "description": "Trabajo fluido con perfiles de ciencia, ingeniería y negocio, actuando como nexo técnico entre distintas áreas."
             },
-            "mlops": {
-                "title": "Infraestructura y MLOps",
-                "description": "Gestión de infraestructura en AWS mediante Terraform para asegurar escalabilidad y eficiencia."
+            "ownership": {
+                "title": "Visión End-to-End",
+                "description": "Implicación en todo el ciclo de desarrollo, desde la definición del problema hasta la validación, optimización y despliegue."
             },
-            "xai": {
-                "title": "IA Explicable (XAI)",
-                "description": "Aplicación de técnicas de interpretabilidad para hacer que modelos complejos sean útiles y transparentes en la toma de decisiones de negocio."
+            "communication": {
+                "title": "Comunicación Técnica",
+                "description": "Capacidad para aterrizar conceptos complejos, alinear equipos y traducir decisiones técnicas en impacto real."
             }
         }
     },
     "skills": {
         "title": "Competencias",
-        "subtitle": "Haz clic en las categorías para explorar las tecnologías. Arrastra los nodos para reorganizar el grafo.",
-        "hint_mobile": "Toca las categorías para expandirlas."
+        "subtitle": "Mapa de habilidades técnicas. Pulsa sobre cada nodo para explorar el detalle.",
+        "hint_mobile": ""
     },
     "experience": {
         "title": "Experiencia",
@@ -52,15 +52,16 @@
                 "company": "TheNextPangea S.L.",
                 "role": "AI Architect & Researcher",
                 "period": "Agosto 2023 – Presente",
-                "description": "Rol híbrido en organización líquida, combinando desarrollo de producto con coordinación técnica de equipos multidisciplinares.",
+                "description": "Rol híbrido en una organización líquida, combinando desarrollo activo de producto con coordinación técnica de equipos multidisciplinares. Mi enfoque se centra en la transferencia tecnológica: llevar investigación de vanguardia a sistemas funcionales con impacto directo en negocio.",
                 "highlights": [
-                    "Transferencia tecnológica: llevar investigación de vanguardia a sistemas funcionales con impacto en negocio.",
-                    "I+D en IA Generativa Tabular: VAEs, Diffusion Models y Transformers para síntesis de datos.",
-                    "Optimización mono y multi-objetivo con BoTorch y algoritmos genéticos.",
-                    "MVP de NLP basado en RAG con Gemini en Google Cloud.",
-                    "Pipelines ETL y modelos predictivos con la librería Darts.",
-                    "Gestión autónoma de infraestructura mediante Terraform (IaC) y CI/CD en AWS.",
-                    "Liderazgo en redacción técnica para propuestas de proyectos públicos."
+                    "Participación directa en todo el ciclo de vida del software, desde la definición del problema y el diseño algorítmico en Python hasta el despliegue en producción.",
+                    "I+D aplicado en IA Generativa Tabular para síntesis y modelado de datos complejos con VAEs, Diffusion Models y Transformers.",
+                    "Diseño de soluciones de optimización mono y multiobjetivo con BoTorch y algoritmos evolutivos/genéticos.",
+                    "Desarrollo de un MVP de IA generativa y NLP basado en RAG con Gemini en Google Cloud.",
+                    "Implementación de pipelines ETL y modelos de forecasting con Darts, integrando múltiples fuentes de datos.",
+                    "Gestión autónoma de infraestructura y MLOps en AWS mediante Terraform, monitorización y procesos de CI/CD.",
+                    "Desarrollo de soluciones de IA explicable para mejorar la transparencia, la adopción y la utilidad de modelos complejos.",
+                    "Liderazgo en la redacción de documentación técnica para propuestas de proyectos públicos, definiendo arquitectura y viabilidad tecnológica."
                 ],
                 "tags": [
                     "Python",
@@ -116,21 +117,108 @@
                 "field": "Sistemas Inteligentes",
                 "institution": "Universidad de Oviedo",
                 "period": "Septiembre 2024 – Presente",
-                "focus": "IA Generativa Tabular"
+                "focus": "IA Generativa Tabular",
+                "awards": []
             },
             {
                 "degree": "Máster",
                 "field": "Inteligencia Artificial",
                 "institution": "Universidad Politécnica de Madrid",
+                "url": "https://muia.dia.fi.upm.es/es/",
                 "period": "Septiembre 2023 – Junio 2024",
-                "focus": ""
+                "focus": "",
+                "awards": [
+                    {
+                        "title": "MH — Trabajo de Fin de Máster",
+                        "description": "Matrícula de Honor · jun. 2024",
+                        "icon": "star"
+                    },
+                    {
+                        "title": "MH — Inteligencia Artificial Explicable",
+                        "description": "Matrícula de Honor · ene. 2024",
+                        "icon": "star"
+                    }
+                ]
             },
             {
                 "degree": "Grado",
                 "field": "Ingeniería Informática",
                 "institution": "Universidad de Oviedo",
+                "url": "https://www.uniovi.es/ast/estudia/grados/ingenieria/informaticasoftware",
                 "period": "Septiembre 2019 – Junio 2023",
-                "focus": ""
+                "focus": "",
+                "awards": [
+                    {
+                        "title": "Mejor Trabajo de Fin de Estudios",
+                        "description": "Cátedra Indra — Mejor TFG de la promoción.",
+                        "icon": "star"
+                    },
+                    {
+                        "title": "Segundo Mejor TFG",
+                        "description": "Universidad de Oviedo — Segundo Mejor Trabajo de Fin de Estudios.",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Mejor TFG Cátedra Capgemini",
+                        "description": "Cátedra Capgemini para la Transformación Digital Sostenible.",
+                        "icon": "award"
+                    },
+                    {
+                        "title": "Ganador Hackathon HP",
+                        "description": "\"La España Vacía\" — Primer premio en hackathon organizado por HP.",
+                        "icon": "trophy"
+                    },
+                    {
+                        "title": "MH — Trabajo Fin de Grado",
+                        "description": "Matrícula de Honor · jun. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Prácticas en Empresa",
+                        "description": "Matrícula de Honor · may. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Sistemas de Información para la Web",
+                        "description": "Matrícula de Honor · ene. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Software para Robots",
+                        "description": "Matrícula de Honor · ene. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Arquitectura del Software",
+                        "description": "Matrícula de Honor · jun. 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Administración de Sistemas y Redes",
+                        "description": "Matrícula de Honor · may. 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Realidad y Accesibilidad Aumentadas",
+                        "description": "Matrícula de Honor · ene. 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Computación Numérica",
+                        "description": "Matrícula de Honor · may. 2021",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Autómatas y Matemáticas Discretas",
+                        "description": "Matrícula de Honor · may. 2020",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "MH — Estadística",
+                        "description": "Matrícula de Honor · may. 2020",
+                        "icon": "medal"
+                    }
+                ]
             }
         ],
         "certifications_title": "Certificaciones",

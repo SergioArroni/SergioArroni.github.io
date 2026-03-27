@@ -20,30 +20,30 @@
     "about": {
         "title": "About Me",
         "description": "A profile at the intersection of applied research and practical engineering. I combine my research work with a full-time position, participating in the entire development cycle: from algorithmic design in Python to production deployment.",
-        "focus_areas": {
-            "title": "Focus Areas",
-            "optimization": {
-                "title": "Algorithms & Optimization",
-                "description": "Implementation of solutions based on Bayesian Optimization (BoTorch), evolutionary algorithms, and time series forecasting."
+        "soft_skills": {
+            "title": "Soft Skills",
+            "technology_transfer": {
+                "title": "Technology Transfer",
+                "description": "Ability to turn advanced research into functional, understandable solutions with direct product and business value."
             },
-            "nlp": {
-                "title": "AI & Language",
-                "description": "Design of RAG architectures with Gemini (GCP) to process complex information."
+            "cross_functional": {
+                "title": "Cross-Functional Collaboration",
+                "description": "Comfort working across science, engineering, and business teams, acting as a technical bridge between disciplines."
             },
-            "mlops": {
-                "title": "Infrastructure & MLOps",
-                "description": "Infrastructure management on AWS using Terraform to ensure scalability and efficiency."
+            "ownership": {
+                "title": "End-to-End Ownership",
+                "description": "Hands-on involvement across the full lifecycle, from problem framing to validation, optimization, and production deployment."
             },
-            "xai": {
-                "title": "Explainable AI (XAI)",
-                "description": "Application of interpretability techniques to make complex models useful and transparent for business decision-making."
+            "communication": {
+                "title": "Technical Communication",
+                "description": "Ability to clarify complex concepts, align stakeholders, and translate technical decisions into practical impact."
             }
         }
     },
     "skills": {
         "title": "Skills",
-        "subtitle": "Click on categories to explore technologies. Drag nodes to reorganize the graph.",
-        "hint_mobile": "Tap categories to expand them."
+        "subtitle": "Technical skill map. Click on any node to explore the details.",
+        "hint_mobile": ""
     },
     "experience": {
         "title": "Experience",
@@ -116,21 +116,108 @@
                 "field": "Intelligent Systems",
                 "institution": "University of Oviedo",
                 "period": "September 2024 – Present",
-                "focus": "Tabular Generative AI"
+                "focus": "Tabular Generative AI",
+                "awards": []
             },
             {
                 "degree": "Master's Degree",
                 "field": "Artificial Intelligence",
                 "institution": "Polytechnic University of Madrid",
+                "url": "https://muia.dia.fi.upm.es/es/",
                 "period": "September 2023 – June 2024",
-                "focus": ""
+                "focus": "",
+                "awards": [
+                    {
+                        "title": "Honors — Master's Thesis",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jun. 2024",
+                        "icon": "star"
+                    },
+                    {
+                        "title": "Honors — Explainable AI",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jan. 2024",
+                        "icon": "star"
+                    }
+                ]
             },
             {
                 "degree": "Bachelor's Degree",
                 "field": "Computer Engineering",
                 "institution": "University of Oviedo",
+                "url": "https://www.uniovi.es/ast/estudia/grados/ingenieria/informaticasoftware",
                 "period": "September 2019 – June 2023",
-                "focus": ""
+                "focus": "",
+                "awards": [
+                    {
+                        "title": "Best Bachelor's Thesis",
+                        "description": "Indra Chair — Best thesis of the graduating class.",
+                        "icon": "star"
+                    },
+                    {
+                        "title": "Second Best Bachelor's Thesis",
+                        "description": "University of Oviedo — Second best thesis.",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Best Thesis - Capgemini Chair",
+                        "description": "Capgemini Chair for Sustainable Digital Transformation.",
+                        "icon": "award"
+                    },
+                    {
+                        "title": "HP Hackathon Winner",
+                        "description": "\"Rural Spain\" — First prize at hackathon organized by HP.",
+                        "icon": "trophy"
+                    },
+                    {
+                        "title": "Honors — Bachelor's Thesis",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jun. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Internship",
+                        "description": "Matrícula de Honor (Highest Distinction) · May 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Web Information Systems",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jan. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Robot Software",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jan. 2023",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Software Architecture",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jun. 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Systems & Network Administration",
+                        "description": "Matrícula de Honor (Highest Distinction) · May 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Augmented Reality & Accessibility",
+                        "description": "Matrícula de Honor (Highest Distinction) · Jan. 2022",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Numerical Computing",
+                        "description": "Matrícula de Honor (Highest Distinction) · May 2021",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Automata & Discrete Mathematics",
+                        "description": "Matrícula de Honor (Highest Distinction) · May 2020",
+                        "icon": "medal"
+                    },
+                    {
+                        "title": "Honors — Statistics",
+                        "description": "Matrícula de Honor (Highest Distinction) · May 2020",
+                        "icon": "medal"
+                    }
+                ]
             }
         ],
         "certifications_title": "Certifications",
